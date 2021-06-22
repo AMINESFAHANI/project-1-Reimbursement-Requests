@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>Manager</title>
+    <style>
+        body {
+            background: rgb(232, 238, 144);
+            font-size: 15px;
+            padding: 20px;
+            text-align: center;
+            margin: 50px auto;
+        }
+        
+        table {
+            background: lightgreen;
+            text-align: center;
+            margin: 50px auto;
+        }
+        
+        div {
+            background: lightgreen text-align center;
+            margin: 50px auto;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h1> All Requests</h1>
+    <table>
+        <thead>
+            <th>Id</th>
+            <th>Amount</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Employee Id</th>
+        </thead>
+        <tbody id="requestTableBody">
+        </tbody>
+    </table><br><br>
+
+    <div>
+        <h1>Update Request </h1>
+
+        <label for="rr_id">Request Id</label>
+        <input name="rr_id" id="rrIdInput" type="number" placeholder="id number"><br><br>
+
+
+        <label for="status">Status</label>
+        <input name="status" id="statusInput" type="text" placeholder="status"><br><br>
+
+
+        <button id="updateBtn" onclick="updateRequest()">update Request</button>
+        <br><br>
+
+        <a href="file:///C:/Users/amin/Desktop/day01/01/project11%20front%20end/Sign_in.html" target="_blank">Sign in page</a>
+        <br><br/>
+        <a href="file:///C:/Users/amin/Desktop/day01/01/project11%20front%20end/reports.html" target="_blank">Statistics Report</a>
+    </div>
+
+
+
+
+</body>
+<script>
+    get_all_requests()
+    const rr_id = document.getElementById("rrIdInput")
+    const rr_status = document.getElementById("statusInput")
+
+
+
+    async function updateRequest() {
+
+        if (rr_status.value === "" || rr_id.value === "") {
+            return alert("Some filels are still empty")
+        } else {
+            const response = await fetch(`http://127.0.0.1:5000/requests/id/${Number(rr_id.value)}/status/${rr_status.value}`, {
+                method: "PATCH"
+            })
+            if (response.status === 200) {
+                return alert(`The request was successfully updated`)
+            } else {
+                return alert("The resource was not found")
+            }
+        }
+    }
+
+
+
+    async function get_all_requests() {
+        const response = await fetch(`http://127.0.0.1:5000/requests`)
+        if (response.status === 404) {
+            return alert(" There is not any request for you.")
+        } else {
+            const requests = await response.json()
+            let innerRows = ""
+            for (let r of requests) {
+                innerRows += `<tr>
+             <td>${r.rrId}</td>
+             <td>${r.rrAmount}</td>
+             <td>${r.rrReason}</td>
+             <td>${r.rrStatus}</td>
+             <td>${r.rrEId}</td>
+             </tr>`
+            }
+            requestTableBody.innerHTML = innerRows
+        }
+    }
+</script>
+
+</html>

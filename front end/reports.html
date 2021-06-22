@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>Statistics Reports</title>
+    <style>
+        body {
+            background: rgb(197, 238, 144);
+            font-size: 15px;
+            padding: 20px;
+            text-align: center;
+            margin: 50px auto;
+        }
+
+        table {
+            background: lightgreen;
+            font-size: 15px;
+            padding: 20px;
+            text-align: center;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1> Total Requests Report</h1>
+    <table>
+        <thead>
+            <th>Total</th>
+            <th>Sum</th>
+            <th>Average</th>
+            <th>Maximum</th>
+            <th>Minimum</th>
+        </thead>
+        <tbody id="totalTable">
+        </tbody>
+    </table><br><br>
+
+
+    <h1> Pending Requests Request</h1>
+    <table>
+        <thead>
+            <th>Total</th>
+            <th>Sum</th>
+            <th>Average</th>
+            <th>Maximum</th>
+            <th>Minimum</th>
+        </thead>
+        <tbody id="pendingTable">
+        </tbody>
+    </table><br><br>
+
+
+    <h1> Rejected Requests Report</h1>
+    <table>
+        <thead>
+            <th>Total</th>
+            <th>Sum</th>
+            <th>Average</th>
+            <th>Maximum</th>
+            <th>Minimum</th>
+        </thead>
+        <tbody id="rejectedTable">
+        </tbody>
+    </table><br><br>
+
+
+    <h1> Accepted Requests Report</h1>
+    <table>
+        <thead>
+            <th>Total</th>
+            <th>Sum</th>
+            <th>Average</th>
+            <th>Maximum</th>
+            <th>Minimum</th>
+        </thead>
+        <tbody id="acceptedTable">
+        </tbody>
+    </table><br><br>
+
+
+
+
+    <a href="file:///C:/Users/amin/Desktop/day01/01/project11%20front%20end/Manager.html" target="_blank">Manager
+        page</a>
+    <br></br>
+    <a href="file:///C:/Users/amin/Desktop/day01/01/project11%20front%20end/reports1%20.html" target="_blank">Employee
+        Requests Reports</a>
+
+
+</body>
+<script>
+    get_reports_for_all()
+    get_pending_reports()
+    get_rejected_reports()
+    get_accepted_reports()
+
+
+    async function get_reports_for_all() {
+        const response = await fetch(`http://127.0.0.1:5000/reports`)
+        if (response.status === 404) {
+            return alert(" There is not any request .")
+        } else {
+            const r = await response.json()
+            let innerRows = ""
+
+            totalTable.innerHTML = `<tr>
+           <td>${r.count}</td>
+           <td>${r.sum}</td>
+           <td>${r.average}</td>
+           <td>${r.max}</td>
+           <td>${r.min}</td>
+           </tr>`
+        }
+    }
+
+    async function get_pending_reports() {
+        const response = await fetch(`http://127.0.0.1:5000/reports/statuses/pending`)
+        if (response.status === 404) {
+            return alert(" There is not any request .")
+        } else {
+            const r = await response.json()
+            let innerRows = ""
+            pendingTable.innerHTML = `<tr>
+        <td>${r.count}</td>
+        <td>${r.sum}</td>
+        <td>${r.average}</td>
+        <td>${r.max}</td>
+        <td>${r.min}</td>
+        </tr>`
+        }
+    }
+
+    async function get_rejected_reports() {
+        const response = await fetch(`http://127.0.0.1:5000/reports/statuses/rejected`)
+        if (response.status === 404) {
+            return alert(" There is not any request .")
+        } else {
+            const r = await response.json()
+            let innerRows = ""
+            rejectedTable.innerHTML = `<tr>
+      <td>${r.count}</td>
+      <td>${r.sum}</td>
+      <td>${r.average}</td>
+      <td>${r.max}</td>
+      <td>${r.min}</td>
+      </tr>`
+        }
+    }
+
+    async function get_accepted_reports() {
+        const response = await fetch(`http://127.0.0.1:5000/reports/statuses/accepted`)
+        if (response.status === 404) {
+            return alert(" There is not any request .")
+        } else {
+            const r = await response.json()
+            let innerRows = ""
+            acceptedTable.innerHTML = `<tr>
+   <td>${r.count}</td>
+   <td>${r.sum}</td>
+   <td>${r.average}</td>
+   <td>${r.max}</td>
+   <td>${r.min}</td>
+   </tr>`
+        }
+    }
+</script>
+
+</html>

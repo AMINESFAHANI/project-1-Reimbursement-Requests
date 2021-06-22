@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>Employees</title>
+
+</head>
+
+<body>
+
+    <h1>Requests</h1><br><br>
+    <table>
+        <thead>
+            <th>Id</th>
+            <th>Amount</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Employee Id</th>
+        </thead>
+        <tbody id="requestTableBody">
+        </tbody>
+    </table><br><br>
+
+    <h1>New Request Registration</h1>
+
+    <label for="amount">Amount</label>
+    <input name="amount" id="amountInput" type="number" placeholder="$"><br><br>
+
+    <label for="reason">Reason</label>
+    <input name="reason" id="reasonInput" type="text" placeholder="Reason"><br><br>
+
+    <label for="status">Status</label>
+    <input name="status" id="statusInput" type="text" placeholder="status"><br><br>
+
+
+    <button id="btn" onclick="addRequest()">Add Request</button>
+
+</body>
+<script>
+    const amountInput = document.getElementById("amountInput")
+    const reasonInput = document.getElementById("reasonInput")
+    const statusInput = document.getElementById("statusInput")
+    const rr_e_id = localStorage.getItem("rr_e_id");
+    get_all_requests_by_e_id(rr_e_id)
+
+    async function addRequest() {
+
+        if (amountInput.value === "" || statusInput.value === "" || reasonInput.value === "") {
+            return alert("Some filels are still empty")
+        } else {
+
+            const r = {
+                rrId: 0,
+                rrAmount: Number(amountInput.value),
+                rrReason: reasonInput.value,
+                rrStatus: statusInput.value,
+                rrEId: rr_e_id,
+            }
+            const config = {
+                method: "POST",
+                headers: {
+                    'Content-Type': "application/json"
+                },
+                body: JSON.stringify(r)
+            }
+            const response = await fetch("http://127.0.0.1:5000/requests", config)
+            if (response.status === 201) {
+                alert(`The request was successfully added`)
+            } else {
+                alert("Something went wrong :(")
+            }
+        }
+    }
+
+    async function get_all_requests_by_e_id(rr_e_id) {
+        const response = await fetch(`http://127.0.0.1:5000/requests/${rr_e_id}`)
+        if (response.status === 404) {
+            return alert(" There is not any request for you.")
+        } else {
+            const requests = await response.json()
+            let innerRows = ""
+            for (let r of requests) {
+                innerRows += `<tr>
+             <td>${r.rrId}</td>
+             <td>${r.rrAmount}</td>
+             <td>${r.rrReason}</td>
+             <td>${r.rrStatus}</td>
+             <td>${r.rrEId}</td>
+             </tr>`
+            }
+            requestTableBody.innerHTML = innerRows
+        }
+    }
+</script>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>Statistics Reports</title>
+    <style>
+        body {
+            background: rgb(197, 238, 144);
+            font-size: 15px;
+            padding: 20px;
+            text-align: center;
+            margin: 50px auto;
+        }
+
+        table {
+            background: lightgreen;
+            font-size: 15px;
+            padding: 20px;
+            text-align: center;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1> Total Requests Report for each employee</h1>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>AMOUNT</th>
+        </thead>
+        <tbody id="totalTable">
+        </tbody>
+    </table><br><br>
+
+
+    <a href="file:///C:/Users/amin/Desktop/day01/01/project11%20front%20end/Manager.html" target="_blank">Manager
+        page</a>
+
+
+</body>
+<script>
+    get_reports_for_all_employees()
+
+
+
+
+
+    async function get_reports_for_all_employees() {
+        const response = await fetch(`http://127.0.0.1:5000/reports/employee`)
+        if (response.status === 404) {
+            return alert(" There is not any request .")
+        } else {
+            const r = await response.json()
+            let innerRows = ""
+            for (let x of r) {
+                innerRows +=
+                    `<tr>
+           <td>${x.eId}</td>
+           <td>${x.eName}</td>
+           <td>${x.amount}</td>
+           </tr>`
+            }
+            totalTable.innerHTML = innerRows
+        }
+    }
+</script>
+
+</html>

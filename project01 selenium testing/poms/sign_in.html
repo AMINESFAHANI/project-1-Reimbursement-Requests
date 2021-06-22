@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>Sign_in</title>
+
+</head>
+
+<body>
+
+    <input id="floatingUsername" type="text" placeholder="The Scarlet Letter"><br><br>
+    <input id="floatingPassword" type="text" placeholder="The Scarlet Letter"><br><br>
+    <button id="helloBtn">Login</button><br><br>
+
+</body>
+
+<script>
+    const usernameInput = document.getElementById("floatingUsername")
+    const passwordInput = document.getElementById("floatingPassword")
+
+    async function signin() {
+        console.log("hello")
+
+        const response = await fetch(`http://127.0.0.1:5000/logging/username/${usernameInput.value}/password/${passwordInput.value}`)
+
+        if (response.status === 400 || response.status === 404) {
+            return alert(" Your username or password does not match.")
+        } else {
+            data = await response.json()
+            if ("mId" in data) {
+                alert(`Dear Manager ${data.mName} wlcome`)
+                location.replace("file:///C:/Users/amin/Desktop/day01/01/project11%20front%20end/Manager.html")
+            } else {
+                alert(`Dear Employee ${data.eName} wlcome`)
+                localStorage.setItem("rr_e_id", data.eId);
+                location.replace("file:///C:/Users/amin/Desktop/day01/01/project11%20front%20end/Employee.html")
+            }
+        }
+
+    }
+    const helloBtn = document.getElementById("helloBtn")
+    helloBtn.addEventListener("click", signin)
+</script>
+
+</html>

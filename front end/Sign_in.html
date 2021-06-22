@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        body {
+            background: lightgreen;
+            font-size: 30px;
+            padding: 20px;
+            text-align: center;
+            margin: 50px auto;
+        }
+        
+        input {
+            font-size: 20px
+        }
+        
+        .btn {
+            background-color: rgb(200, 255, 0);
+            font-size: 20px
+        }
+        
+        .btn:hover {
+            box-shadow: 0px 20px white;
+            padding: 5px 20px;
+        }
+        
+        h2 {
+            text-align: center
+        }
+    </style>
+
+
+    <title>Sign_in</title>
+
+
+
+
+
+
+</head>
+
+<body>
+
+    <h2>Signin Page</h2>
+
+    <input id="floatingUsername" type="text" placeholder="Enter Username"><br><br>
+    <input id="floatingPassword" type="text" placeholder="Enter Password"><br><br>
+    <button id="helloBtn" class="btn">Login</button>
+    <br><br>
+
+</body>
+
+<script>
+    const usernameInput = document.getElementById("floatingUsername")
+    const passwordInput = document.getElementById("floatingPassword")
+
+    async function signin() {
+        console.log("hello")
+
+        const response = await fetch(`http://127.0.0.1:5000/logging/username/${usernameInput.value}/password/${passwordInput.value}`)
+
+        if (response.status === 400 || response.status === 404) {
+            return alert(" Your username or password does not match.")
+        } else {
+            data = await response.json()
+            if ("mId" in data) {
+                alert(`Dear Manager ${data.mName} wlcome`)
+                location.replace("file:///C:/Users/amin/Desktop/day01/01/project11%20front%20end/Manager.html")
+            } else {
+                alert(`Dear Employee ${data.eName} wlcome`)
+                localStorage.setItem("rr_e_id", data.eId);
+                location.replace("file:///C:/Users/amin/Desktop/day01/01/project11%20front%20end/Employee.html")
+            }
+        }
+
+    }
+    const helloBtn = document.getElementById("helloBtn")
+    helloBtn.addEventListener("click", signin)
+</script>
+
+</html>
